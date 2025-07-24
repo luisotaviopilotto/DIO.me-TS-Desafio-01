@@ -1,42 +1,62 @@
 export abstract class DioAccount {
-  private name: string
-  private readonly accountNumber: number
-  balance: number = 0
-  private status: boolean = true
+  private readonly name: string;
+  private readonly accountNumber: number;
+  protected balance: number = 0;
+  private status: boolean = true;
 
-  constructor(name: string, accountNumber: number){
-    this.name = name
-    this.accountNumber = accountNumber
+  constructor(name: string, accountNumber: number) {
+    this.name = name;
+    this.accountNumber = accountNumber;
   }
 
-  setName = (name: string): void => {
-    this.name = name
-    console.log('Nome alterado com sucesso!')
-  }
+  // Pega número da conta
+  getAccountNumber = () => {
+    console.log(`Número da conta: ${this.accountNumber}`);
+  };
 
-  getName = (): string => {
-    return this.name
-  }
+  // Pega nome da conta
+  getName = (): void => {
+    console.log(`Nome da conta: ${this.name}`);
+  };
 
-  deposit = (): void => {
-    if(this.validateStatus()){
-      console.log('Voce depositou')
-    }
-  }
-
-  withdraw = (): void => {
-    console.log('Voce sacou')
-  }
-
+  // Pega saldo da conta
   getBalance = (): void => {
-    console.log(this.balance)
-  }
+    console.log(`Seu saldo é de: R$ ${this.balance}`);
+  };
 
-  private validateStatus = (): boolean => {
+  // Seta o saldo da conta
+  protected setBalance = (balance: number) => {
+    this.balance = balance;
+  };
+
+  // Realiza depósito na conta
+  deposit = (value: number): void => {
+    if (this.validateStatus()) {
+      this.setBalance(value);
+      console.log(`Depósito de R$ ${value} realizado com sucesso`);
+    }
+  };
+
+  // Realiza o saque na conta
+  withdraw = (value: number): void => {
+    if (this.validateStatus()) {
+      if (this.balance >= value) {
+        this.setBalance(this.balance - value);
+        console.log(`Saque no valor de R$ ${value} realizado com sucesso`);
+      } else {
+        console.log(
+          `Seu saldo é insuficiente para realizar o saque de R$ ${value}`
+        );
+      }
+    }
+  };
+
+  // Verifica status da conta
+  protected validateStatus = (): boolean => {
     if (this.status) {
-      return this.status
+      return this.status;
     }
 
-    throw new Error('Conta inválida')
-  }
+    throw new Error("Conta inválida");
+  };
 }
